@@ -1,7 +1,27 @@
 import Joi from "joi";
-import { emailRegex } from "../constants";
+import { emailRegex, phoneNoRegex } from "../constants/index.js";
 
 const signValidation = Joi.object({
   name: Joi.string().required().trim(),
-  eamil: Joi.string().pattern(emailRegex),
+  email: Joi.string().required().pattern(emailRegex),
+  password: Joi.string().required().trim(),
+  phoneNumber: Joi.string().pattern(phoneNoRegex),
+  countryCode: Joi.string().when("phoneNumber", {
+    is: Joi.exist(),
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
 });
+
+const loginValidation = Joi.object({
+  email: Joi.string().pattern(emailRegex),
+  password: Joi.string().required().trim(),
+});
+
+
+const otpVerification = Joi.object({
+  email: Joi.string().required().pattern(emailRegex),
+  otp: Joi.string().required().trim(),
+})
+
+export { signValidation, loginValidation, otpVerification };
