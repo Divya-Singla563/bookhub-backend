@@ -18,7 +18,6 @@ const signUp = async (data) => {
         const hashedPassword = await bcrypt.hash(password, 10)
 
         // 3️⃣ Create or update unverified user
-
         await Modals.User.findOneAndUpdate(
             { email },
             {
