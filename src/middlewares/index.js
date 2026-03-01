@@ -1,3 +1,4 @@
-import { languageMiddleware } from "./language-middleware.js";
+import { languageMiddleware,  } from "./language-middleware.js";
+import { authVerify } from "./token-verification.js";
 
-export { languageMiddleware };
+export { languageMiddleware, authVerify };

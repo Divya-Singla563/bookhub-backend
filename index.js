@@ -7,7 +7,6 @@ import { Messages } from "./src/constants/index.js";
 import { languageMiddleware } from "./src/middlewares/language-middleware.js";
 import routes from "./src/routes/index.js";
 
-
 const app = express();
 
 //middlewares

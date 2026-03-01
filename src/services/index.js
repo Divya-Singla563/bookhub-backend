@@ -1,3 +1,3 @@
-import { signUp, verify } from "./users.js";
+import { signUp, verify, login } from "./users.js";
 
-export { signUp, verify };
+export { signUp, verify, login };

@@ -12,9 +12,7 @@ const signUp = async (req, res, next) => {
     const result = await Services.signUp(req.body);
 
     return res.status(200).json({
-      message:
-        req.messages?.[result.message] || Messages.en[result.message],
-
+      message: req.messages?.[result.message] || Messages.en[result.message],
     });
   } catch (error) {
     console.log("sign up error", error);
@@ -25,23 +23,50 @@ const signUp = async (req, res, next) => {
 
 const verify = async (req, res, next) => {
   try {
-    const { error } = await Validations.otpVerification.validate(req.body)
+    const { error } = await Validations.otpVerification.validate(req.body);
 
     if (error) {
-      return res.status(400).json({ message: error.details[0].message })
+      return res.status(400).json({ message: error.details[0].message });
     }
 
-    const result = await Services.verify(req.body)
+    const result = await Services.verify(req.body);
 
     return res.status(200).json({
       message: req.messages?.[result.message] || Messages.en[result.message],
-      data: result.data
-    })
+      data: result.data,
+    });
   } catch (error) {
-    console.log(error, 'errorerror');
+    console.log(error, "errorerror");
 
-    next(error)
+    next(error);
   }
-}
+};
 
-export { signUp, verify };
+const login = async (req, res, next) => {
+  try {
+    const { error } = await Validations.loginValidation.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const result = await Services.login(req.body);
+
+    return res.status(200).json({
+      message: res.messages?.[result.message] || result.message,
+      data: result.data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getProfile = async (req, res, next) => {
+  try {
+    console.log(req.user, "pppp");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUp, verify, login, getProfile };
