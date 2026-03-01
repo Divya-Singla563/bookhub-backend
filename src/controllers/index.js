@@ -1,3 +1,21 @@
-import { signUp, verify, login, getProfile } from "./users.js";
+import {
+  signUp,
+  verify,
+  login,
+  getProfile,
+  updateProfile,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+} from "./users.js";
 
-export { signUp, verify, login, getProfile };
+export {
+  signUp,
+  verify,
+  login,
+  getProfile,
+  updateProfile,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+};

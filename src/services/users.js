@@ -74,9 +74,9 @@ const verify = async (data) => {
       isEmailVerified: true,
     });
 
-    if (findUser) {
-      throw new Error(Messages.en.USER_ALREADY_EXISTS);
-    }
+    // if (findUser) {
+    //   throw new Error(Messages.en.USER_ALREADY_EXISTS);
+    // }
     console.log(findUser, "findUser", otpData, otpData.otp !== hashedOtp);
 
     if (otpData && otpData.otp !== hashedOtp) {
@@ -153,4 +153,130 @@ const login = async (body) => {
   }
 };
 
-export { signUp, verify, login };
+const getProfile = async (id) => {
+  try {
+    const newUser = await Modals.User.findById(id).lean();
+    return {
+      message: "success",
+      statusCode: 200,
+      data: newUser,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateProfile = async (body, userId) => {
+  try {
+    const updatedUser = await Modals.User.findByIdAndUpdate(
+      userId,
+      { $set: body },
+      { new: true, runValidators: true },
+    );
+
+    console.log(updatedUser, "body", userId);
+    return { message: "User updated successfully", data: updatedUser };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const forgotPassword = async (body) => {
+  const { email } = body;
+  try {
+    console.log(email, "fffor");
+    const findUser = await Modals.User.findOne({ email });
+    console.log(findUser, "findUser");
+
+    if (!findUser) {
+      throw new Error("User not found");
+    }
+
+    let OTP = 1234;
+    const hashedOtp = hashOTP(OTP);
+    const expiresAt = dayjs().add(10, "minutes").toDate();
+
+    await Modals.OTP.findOneAndUpdate(
+      { email },
+      { otp: hashedOtp, expiresAt },
+      { upsert: true, returnDocument: "after" },
+    );
+
+    if (email) {
+      sendEmail(email, OTP);
+    }
+
+    return {
+      message: Messages.en.OTP_SEND,
+      statusCode: 200,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const resetPassword = async (body, id) => {
+  const { password } = body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await Modals.User.findByIdAndUpdate(
+      id,
+      { $set: { password: hashedPassword } },
+      { new: true },
+    ).select("-password");
+
+    return {
+      message: "Password updated successfully",
+      statusCode: 200,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const changePassword = async (body, id) => {
+  const { oldPassword, newPassword } = body;
+
+  try {
+    const findUser = await Modals.User.findById(id).select("+password").lean();
+
+    if (!findUser) {
+      throw new Error("User not found");
+    }
+
+    const isPasswordMatched = await bcrypt.compare(
+      oldPassword,
+      findUser.password,
+    );
+
+    if (!isPasswordMatched) {
+      throw new Error("Old password is incorrect");
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    await Modals.User.findByIdAndUpdate(
+      id,
+      { $set: { password: hashedNewPassword } },
+      { new: true },
+    );
+
+    return {
+      message: "Password changed succesffully",
+      statusCode: 200,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  signUp,
+  verify,
+  login,
+  getProfile,
+  updateProfile,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+};
