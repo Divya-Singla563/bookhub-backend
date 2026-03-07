@@ -1,3 +1,4 @@
+import { uploadImage } from "./upload.js";
 import {
   signUp,
   verify,
@@ -18,4 +19,6 @@ export {
   forgotPassword,
   resetPassword,
   changePassword,
+  //
+  uploadImage,
 };
