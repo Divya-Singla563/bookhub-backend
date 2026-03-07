@@ -6,7 +6,9 @@ import { generateToken, hashOTP, sendEmail } from "../utils/index.js";
 
 const signUp = async (data) => {
   try {
-    const { name, email, password } = data;
+    const { name, email, password, type } = data;
+
+    console.log(type, "type");
 
     const verifiedUser = await Modals.User.findOne({
       email,
@@ -41,7 +43,7 @@ const signUp = async (data) => {
 
     await Modals.OTP.findOneAndUpdate(
       { email },
-      { otp: hashedOtp, expiresAt },
+      { otp: hashedOtp, expiresAt, type },
       { upsert: true, returnDocument: "after" },
     );
 
@@ -74,9 +76,9 @@ const verify = async (data) => {
       isEmailVerified: true,
     });
 
-    // if (findUser) {
-    //   throw new Error(Messages.en.USER_ALREADY_EXISTS);
-    // }
+    if (findUser && otpData.type === 1) {
+      throw new Error(Messages.en.USER_ALREADY_EXISTS);
+    }
     console.log(findUser, "findUser", otpData, otpData.otp !== hashedOtp);
 
     if (otpData && otpData.otp !== hashedOtp) {
@@ -121,8 +123,6 @@ const login = async (body) => {
     const userExisted = await Modals.User.findOne({ email })
       .select("+password")
       .lean();
-
-    console.log(userExisted, "userExisted");
 
     if (!userExisted || !userExisted?.isEmailVerified) {
       throw new Error("User not found");
@@ -182,11 +182,9 @@ const updateProfile = async (body, userId) => {
 };
 
 const forgotPassword = async (body) => {
-  const { email } = body;
+  const { email, type } = body;
   try {
-    console.log(email, "fffor");
     const findUser = await Modals.User.findOne({ email });
-    console.log(findUser, "findUser");
 
     if (!findUser) {
       throw new Error("User not found");
@@ -198,7 +196,7 @@ const forgotPassword = async (body) => {
 
     await Modals.OTP.findOneAndUpdate(
       { email },
-      { otp: hashedOtp, expiresAt },
+      { otp: hashedOtp, expiresAt, type },
       { upsert: true, returnDocument: "after" },
     );
 

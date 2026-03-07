@@ -11,6 +11,7 @@ const signValidation = Joi.object({
     then: Joi.required(),
     otherwise: Joi.optional(),
   }),
+  type: Joi.optional(),
 });
 
 const loginValidation = Joi.object({
@@ -35,6 +36,7 @@ const updateValidation = Joi.object({
 
 const forgotValidation = Joi.object({
   email: Joi.string().required().pattern(emailRegex),
+  type: Joi.optional(),
 });
 
 const resetValidation = Joi.object({

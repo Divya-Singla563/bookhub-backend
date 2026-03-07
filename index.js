@@ -6,6 +6,8 @@ import connectDB from "./src/db/db.js";
 import { Messages } from "./src/constants/index.js";
 import { languageMiddleware } from "./src/middlewares/language-middleware.js";
 import routes from "./src/routes/index.js";
+import requestLogger from "./src/middlewares/request-logger.js";
+import errorHandler from "./src/middlewares/error-handler.js";
 
 const app = express();
 
@@ -13,9 +15,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(languageMiddleware);
+app.use(requestLogger); // automatic request logging
 
 //routes
 app.use("/api", routes);
+
+app.use(errorHandler); //centralized error logging
 
 // global error handler
 app.use((error, req, res, next) => {
