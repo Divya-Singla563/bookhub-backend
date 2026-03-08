@@ -8,12 +8,14 @@ import { languageMiddleware } from "./src/middlewares/language-middleware.js";
 import routes from "./src/routes/index.js";
 import requestLogger from "./src/middlewares/request-logger.js";
 import errorHandler from "./src/middlewares/error-handler.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 //middlewares
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(languageMiddleware);
 app.use(requestLogger); // automatic request logging
 

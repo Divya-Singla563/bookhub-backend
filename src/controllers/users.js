@@ -52,9 +52,19 @@ const login = async (req, res, next) => {
 
     const result = await Services.login(req.body);
 
+    res.cookie("refreshToken", result.data.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
     return res.status(200).json({
       message: res.messages?.[result.message] || result.message,
-      data: result.data,
+      data: {
+        ...result.data,
+        refreshToken: undefined, // optional: hide refresh token from response
+      },
     });
   } catch (error) {
     next(error);

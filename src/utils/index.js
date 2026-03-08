@@ -1,4 +1,15 @@
 import { sendEmail } from "./mailer.js";
-import { generateToken, verifyToken, hashOTP } from "./token.js";
+import {
+  generateToken,
+  verifyToken,
+  hashOTP,
+  generateAndSaveRefreshToken,
+} from "./token.js";
 
-export { sendEmail, generateToken, verifyToken, hashOTP };
+export {
+  sendEmail,
+  generateToken,
+  verifyToken,
+  hashOTP,
+  generateAndSaveRefreshToken,
+};

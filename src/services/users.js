@@ -2,7 +2,12 @@ import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import { Messages } from "../constants/index.js";
 import * as Modals from "../modals/index.js";
-import { generateToken, hashOTP, sendEmail } from "../utils/index.js";
+import {
+  generateToken,
+  hashOTP,
+  sendEmail,
+  generateAndSaveRefreshToken,
+} from "../utils/index.js";
 
 const signUp = async (data) => {
   try {
@@ -101,7 +106,9 @@ const verify = async (data) => {
       await Modals.OTP.deleteOne({ email });
 
       const token = generateToken({ _id: user._id });
-      console.log(token, "token");
+      const refreshToken = await generateAndSaveRefreshToken({
+        _id: userExisted?._id,
+      });
 
       return {
         message: Messages.en.OTP_VERIFIED,
@@ -109,6 +116,7 @@ const verify = async (data) => {
         data: {
           ...user,
           token,
+          refreshToken,
         },
       };
     }
@@ -138,7 +146,13 @@ const login = async (body) => {
     }
 
     delete userExisted.password;
-    const token = await generateToken({ _id: userExisted?._id });
+
+    const token = generateToken({ _id: userExisted._id });
+
+    const refreshToken = await generateAndSaveRefreshToken({
+      _id: userExisted?._id,
+    });
+    
 
     return {
       message: "get data",
@@ -146,6 +160,7 @@ const login = async (body) => {
       data: {
         ...userExisted,
         token,
+        refreshToken,
       },
     };
   } catch (error) {
