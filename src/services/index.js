@@ -1,3 +1,4 @@
+import { addBook, getUserBooks, getMyBookById } from "./books.js";
 import {
   signUp,
   verify,
@@ -18,4 +19,7 @@ export {
   forgotPassword,
   resetPassword,
   changePassword,
+  addBook,
+  getUserBooks,
+  getMyBookById,
 };

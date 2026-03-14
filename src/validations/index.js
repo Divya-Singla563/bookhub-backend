@@ -1,3 +1,4 @@
+import { addBook } from "./books.js";
 import {
   loginValidation,
   otpVerification,
@@ -16,4 +17,6 @@ export {
   forgotValidation,
   resetValidation,
   changePasswordValidation,
+  //books
+  addBook,
 };

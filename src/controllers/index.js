@@ -1,3 +1,4 @@
+import { addBook, getUserBooks, getMyBookById } from "./books.js";
 import { uploadImage } from "./upload.js";
 import {
   signUp,
@@ -21,4 +22,8 @@ export {
   changePassword,
   //
   uploadImage,
+  //
+  addBook,
+  getUserBooks,
+  getMyBookById,
 };

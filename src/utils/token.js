@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 const generateToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "5min" });
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "2d" });
 };
 
 const generateAndSaveRefreshToken = (payload) => {

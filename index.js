@@ -17,7 +17,7 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(languageMiddleware);
-app.use(requestLogger); // automatic request logging
+// app.use(requestLogger); // automatic request logging
 
 //routes
 app.use("/api", routes);

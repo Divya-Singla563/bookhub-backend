@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 
 export const authVerify = async (req, res, next) => {
-  console.log("sdfsd");
-
   try {
     const authorization = req.headers.authorization;
     if (!authorization) {
@@ -17,7 +15,6 @@ export const authVerify = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-    console.log("::::::::::::::::::::::::>>>>>>>>>>", decoded);
     next();
   } catch (error) {
     console.log(error);
