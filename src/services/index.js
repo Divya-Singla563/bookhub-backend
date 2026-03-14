@@ -1,4 +1,10 @@
-import { addBook, getUserBooks, getMyBookById } from "./books.js";
+import {
+  addBook,
+  getUserBooks,
+  getMyBookById,
+  updateMyBook,
+  deleteBook,
+} from "./books.js";
 import {
   signUp,
   verify,
@@ -19,7 +25,10 @@ export {
   forgotPassword,
   resetPassword,
   changePassword,
+  //books
   addBook,
   getUserBooks,
   getMyBookById,
+  updateMyBook,
+  deleteBook,
 };

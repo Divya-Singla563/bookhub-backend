@@ -1,4 +1,10 @@
-import { addBook, getUserBooks, getMyBookById } from "./books.js";
+import {
+  addBook,
+  getUserBooks,
+  getMyBookById,
+  updateMyBook,
+  deleteBook,
+} from "./books.js";
 import { uploadImage } from "./upload.js";
 import {
   signUp,
@@ -22,8 +28,10 @@ export {
   changePassword,
   //
   uploadImage,
-  //
+  //books
   addBook,
   getUserBooks,
   getMyBookById,
+  updateMyBook,
+  deleteBook,
 };

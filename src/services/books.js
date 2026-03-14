@@ -82,4 +82,49 @@ const getMyBookById = async (userId, bookId) => {
   }
 };
 
-export { addBook, getUserBooks, getMyBookById };
+const updateMyBook = async (data, bookId, userId) => {
+  try {
+    const updatedBook = await Modals.Book.findOneAndUpdate(
+      {
+        _id: bookId,
+        user: userId,
+      },
+      {
+        $set: data,
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ).lean();
+
+    if (!updatedBook) {
+      throw new Error("Book now found");
+    }
+
+    return {
+      message: "Book updated successfully",
+      data: updatedBook,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteBook = async (userId, bookId) => {
+  try {
+    if (!mongoose.Types.ObjectId(bookId).isValid) {
+      throw new Error("Book id not valid");
+    }
+    await Modals.Book.findOneAndDelete({
+      _id: bookId,
+      user: userId,
+    }).lean();
+
+    return { message: "Book deleted successfully" };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { addBook, getUserBooks, getMyBookById, updateMyBook, deleteBook };
