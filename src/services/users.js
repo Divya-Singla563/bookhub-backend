@@ -11,9 +11,9 @@ import {
 
 const signUp = async (data) => {
   try {
-    const { name, email, password, type } = data;
+    const { name, email, password, type, role } = data;
 
-    console.log(type, "type");
+    console.log(type, "type", role);
 
     const verifiedUser = await Modals.User.findOne({
       email,
@@ -34,6 +34,7 @@ const signUp = async (data) => {
         email,
         password: hashedPassword,
         isEmailVerified: false,
+        role,
       },
       {
         upsert: true,
@@ -105,9 +106,9 @@ const verify = async (data) => {
 
       await Modals.OTP.deleteOne({ email });
 
-      const token = generateToken({ _id: user._id });
+      const token = generateToken({ _id: user._id, role: user.role });
       const refreshToken = await generateAndSaveRefreshToken({
-        _id: userExisted?._id,
+        _id: user?._id,
       });
 
       return {
@@ -147,12 +148,14 @@ const login = async (body) => {
 
     delete userExisted.password;
 
-    const token = generateToken({ _id: userExisted._id });
+    const token = generateToken({
+      _id: userExisted._id,
+      role: userExisted.role,
+    });
 
     const refreshToken = await generateAndSaveRefreshToken({
       _id: userExisted?._id,
     });
-    
 
     return {
       message: "get data",

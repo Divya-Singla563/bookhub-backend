@@ -3,6 +3,7 @@ import { emailRegex, phoneNoRegex } from "../constants/index.js";
 
 const signValidation = Joi.object({
   name: Joi.string().required().trim(),
+  role: Joi.string().required(),
   email: Joi.string().required().pattern(emailRegex),
   password: Joi.string().required().trim(),
   phoneNumber: Joi.string().pattern(phoneNoRegex),

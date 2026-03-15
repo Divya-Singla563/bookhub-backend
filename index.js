@@ -39,7 +39,7 @@ app.use((error, req, res, next) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   connectDB();
-  Seed.seedCategories();
+  // Seed.seedCategories();
 });
 
 export default app;
