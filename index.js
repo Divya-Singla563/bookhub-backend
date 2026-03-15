@@ -27,6 +27,8 @@ app.use(errorHandler); //centralized error logging
 
 // global error handler
 app.use((error, req, res, next) => {
+  console.log(next, error);
+
   res.status(error.status || 400).json({
     success: false,
     message:
