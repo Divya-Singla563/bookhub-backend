@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./src/db/db.js";
 import { Messages } from "./src/constants/index.js";
+import * as Seed from "./src/seed/index.js";
 import { languageMiddleware } from "./src/middlewares/language-middleware.js";
 import routes from "./src/routes/index.js";
 import requestLogger from "./src/middlewares/request-logger.js";
@@ -38,6 +39,7 @@ app.use((error, req, res, next) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   connectDB();
+  Seed.seedCategories();
 });
 
 export default app;

@@ -1,4 +1,5 @@
 import { addBook } from "./books.js";
+import { category } from "./category.js";
 import {
   loginValidation,
   otpVerification,
@@ -8,7 +9,6 @@ import {
   resetValidation,
   changePasswordValidation,
 } from "./users.js";
-
 export {
   signValidation,
   loginValidation,
@@ -19,4 +19,5 @@ export {
   changePasswordValidation,
   //books
   addBook,
+  category,
 };

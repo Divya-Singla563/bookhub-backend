@@ -37,6 +37,7 @@ const getUserBooks = async (userId, page, limit, search) => {
     }
 
     const books = await Modals.Book.find(query)
+      .populate({ path: "user", select: "email name" })
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ createdAt: -1 })
@@ -67,7 +68,9 @@ const getMyBookById = async (userId, bookId) => {
     const book = await Modals.Book.findOne({
       _id: bookId,
       user: userId,
-    }).lean();
+    })
+      .populate({ path: "user", select: "email name" })
+      .lean();
 
     if (!book) {
       throw new Error("Book not found");
@@ -113,8 +116,12 @@ const updateMyBook = async (data, bookId, userId) => {
 
 const deleteBook = async (userId, bookId) => {
   try {
-    if (!mongoose.Types.ObjectId(bookId).isValid) {
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
       throw new Error("Book id not valid");
+    }
+    const book = await Modals.Book.findById(bookId);
+    if (!book) {
+      throw new Error("Book not found");
     }
     await Modals.Book.findOneAndDelete({
       _id: bookId,

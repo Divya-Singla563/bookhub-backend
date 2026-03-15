@@ -5,6 +5,7 @@ import {
   updateMyBook,
   deleteBook,
 } from "./books.js";
+import { addCategory } from "./category.js";
 import {
   signUp,
   verify,
@@ -31,4 +32,5 @@ export {
   getMyBookById,
   updateMyBook,
   deleteBook,
+  addCategory,
 };

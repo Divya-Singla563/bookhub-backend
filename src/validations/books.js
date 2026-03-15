@@ -9,7 +9,12 @@ const addBook = Joi.object({
   ISBN: Joi.string().required(),
   numberOfPages: Joi.number().required(),
   productTag: Joi.string().required(),
-
+  images: Joi.array().items(
+    Joi.object({
+      url: Joi.string().uri().required(),
+      public_id: Joi.string().required(),
+    }),
+  ),
   //   category: Joi.string().required(),
 });
 

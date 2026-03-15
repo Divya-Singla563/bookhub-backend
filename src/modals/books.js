@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const booksSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     title: {
       type: String,
       trim: true,
@@ -33,14 +39,11 @@ const booksSchema = new mongoose.Schema(
       enum: ["new", "old"],
       default: "old",
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+
     images: [
       {
-        type: String,
+        url: String,
+        public_id: String,
       },
     ],
   },
