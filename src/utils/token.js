@@ -17,22 +17,5 @@ const hashOTP = (otp) => {
   return crypto.createHash("sha256").update(String(otp)).digest("hex");
 };
 
-// export const refreshToken = (req, res) => {
-//   const token = req.cookies.refreshToken;
-
-//   if (!token) return res.status(401).send("No refresh token");
-
-//   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-//     if (err) return res.status(403).send("Invalid token");
-
-//     const newAccessToken = jwt.sign(
-//       { id: user.id },
-//       process.env.ACCESS_TOKEN_SECRET,
-//       { expiresIn: "15m" }
-//     );
-
-//     res.json({ accessToken: newAccessToken });
-//   });
-// };
 
 export { generateToken, verifyToken, hashOTP, generateAndSaveRefreshToken };

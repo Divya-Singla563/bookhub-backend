@@ -1,33 +1,33 @@
 import * as Modals from "../modals/index.js";
 
-const
-  addPrescription = async (userId, payload) => {
-    try {
-      const { fileUrl, publicId } = payload;
+const addPrescription = async (userId, payload) => {
+  try {
+    const { fileUrl, publicId } = payload;
 
-      if (!fileUrl) {
-        throw new Error("Please provide fileUrl");
-      }
-
-      const prescription = await Modals.Prescription.create({
-        user: userId,
-        fileUrl,
-        publicId,
-      });
-
-      return {
-        message: "Prescription added successfully",
-        data: prescription,
-      };
-    } catch (error) {
-      console.error(error);
-      throw error;
+    if (!fileUrl) {
+      throw new Error("Please provide fileUrl");
     }
-  };
+
+    const prescription = await Modals.Prescription.create({
+      user: userId,
+      fileUrl,
+      publicId,
+    });
+
+    return {
+      message: "Prescription added successfully",
+      data: prescription,
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 const getMyPrescriptions = async (userId, page, limit, search) => {
   try {
     const query = { user: userId };
+    console.log(query, 'kkkk')
 
     const prescriptions = await Modals.Prescription.find(query)
       .populate({ path: "user", select: "email name" })

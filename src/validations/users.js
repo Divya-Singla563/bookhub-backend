@@ -32,7 +32,6 @@ const forgotValidation = Joi.object({
   email: Joi.string().required().pattern(emailRegex),
   type: Joi.optional(),
 });
-console.log(forgotValidation, "ppforgotValidation");
 
 const resetValidation = Joi.object({
   password: Joi.string().required(),

@@ -1,6 +1,5 @@
 import * as Validations from "../validations/index.js";
 import * as Services from "../services/index.js";
-import { Messages } from "../constants/index.js";
 
 const signUp = async (req, res, next) => {
   try {
@@ -12,7 +11,7 @@ const signUp = async (req, res, next) => {
     const result = await Services.signUp(req.body);
 
     return res.status(200).json({
-      message: req.messages?.[result.message] || Messages.en[result.message],
+      message: result.message,
     });
   } catch (error) {
     console.log("sign up error", error);
@@ -32,7 +31,7 @@ const verify = async (req, res, next) => {
     const result = await Services.verify(req.body);
 
     return res.status(200).json({
-      message: req.messages?.[result.message] || Messages.en[result.message],
+      message: result.message,
       data: result.data,
     });
   } catch (error) {

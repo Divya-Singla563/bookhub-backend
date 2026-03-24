@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
-import { Messages } from "../constants/index.js";
 import * as Modals from "../modals/index.js";
 import {
   generateToken,
@@ -21,7 +20,7 @@ const signUp = async (data) => {
     });
 
     if (verifiedUser) {
-      throw new Error(Messages.en.USER_ALREADY_VERIFIED);
+      throw new Error("User Already Verified");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -59,7 +58,7 @@ const signUp = async (data) => {
     }
 
     return {
-      message: Messages.en.OTP_SEND,
+      message: "Otp Send",
       statusCode: 200,
     };
   } catch (error) {
@@ -75,7 +74,7 @@ const verify = async (data) => {
     const otpData = await Modals.OTP.findOne({ email });
 
     if (!otpData) {
-      throw new Error(Messages.en.OTP_EXPIRED);
+      throw new Error("Otp Expired");
     }
 
     const findUser = await Modals.User.findOne({
@@ -84,14 +83,14 @@ const verify = async (data) => {
     });
 
     if (findUser && otpData.type === 1) {
-      throw new Error(Messages.en.USER_ALREADY_EXISTS);
+      throw new Error("User Already Exists");
     }
     console.log(findUser, "findUser", otpData, otpData.otp !== hashedOtp);
 
     if (otpData && otpData.otp !== hashedOtp) {
       console.log("chalaa");
 
-      throw new Error(Messages.en.INVALID_OTP);
+      throw new Error("Invalid Otp");
     }
     console.log("chalaa 2");
     if (otpData) {
@@ -102,7 +101,7 @@ const verify = async (data) => {
       );
       console.log("chalaa 3");
       if (!user) {
-        throw new Error(Messages.en.USER_NOT_FOUND);
+        throw new Error("User Not Found");
       }
 
       await Modals.OTP.deleteOne({ email });
@@ -113,7 +112,7 @@ const verify = async (data) => {
       });
 
       return {
-        message: Messages.en.OTP_VERIFIED,
+        message: "Otp Verified",
         statusCode: 200,
         data: {
           ...user,
@@ -223,7 +222,7 @@ const forgotPassword = async (body) => {
     }
 
     return {
-      message: Messages.en.OTP_SEND,
+      message: "Otp Send",
       statusCode: 200,
     };
   } catch (error) {
