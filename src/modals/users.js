@@ -13,28 +13,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    phoneNumber: {
-      type: String,
-      trim: true,
-    },
-    countryCode: {
-      type: String,
-      trim: true,
-    },
     password: {
       type: String,
       select: false,
     },
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user",
-    },
     isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    isPhoneVerified: {
       type: Boolean,
       default: false,
     },

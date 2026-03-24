@@ -4,7 +4,9 @@ export const uploadImage = async (req, res) => {
   try {
     const file = req.file;
 
-    const result = await cloudinary.uploader.upload(file.path);
+    const result = await cloudinary.uploader.upload(file.path, {
+      resource_type: "auto",
+    });
 
     res.json({
       url: result.secure_url,

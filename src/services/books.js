@@ -4,6 +4,8 @@ import * as Modals from "../modals/index.js";
 const addBook = async (data, userId) => {
   try {
     if (data.ISBN) {
+      console.log(data.ISBN, "----");
+
       const existingISBN = await Modals.Book.findOne({
         ISBN: data.ISBN,
         user: userId,

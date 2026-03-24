@@ -2,12 +2,14 @@ import { Router } from "express";
 
 import userRoutes from "./users.js";
 import uploadRoutes from "./uploads.js";
-import booksRoutes from "./books.js";
+import homescreenRoutes from "./homescreen.js";
+import prescriptionRoutes from "./prescription.js";
 
 const router = Router();
 
 router.use("/auth", userRoutes);
 router.use("/", uploadRoutes);
-router.use("/", booksRoutes);
+router.use("/", homescreenRoutes);
+router.use("/", prescriptionRoutes);
 
 export default router;

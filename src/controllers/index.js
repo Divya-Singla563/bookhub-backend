@@ -16,6 +16,8 @@ import {
   resetPassword,
   changePassword,
 } from "./users.js";
+import { getHomescreenData } from "./homescreen.js";
+import { addPrescription, getMyPrescriptions } from "./prescription.js";
 
 export {
   signUp,
@@ -34,4 +36,7 @@ export {
   getMyBookById,
   updateMyBook,
   deleteBook,
+  getHomescreenData,
+  addPrescription,
+  getMyPrescriptions,
 };

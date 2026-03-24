@@ -3,15 +3,8 @@ import { emailRegex, phoneNoRegex } from "../constants/index.js";
 
 const signValidation = Joi.object({
   name: Joi.string().required().trim(),
-  role: Joi.string().required(),
   email: Joi.string().required().pattern(emailRegex),
   password: Joi.string().required().trim(),
-  phoneNumber: Joi.string().pattern(phoneNoRegex),
-  countryCode: Joi.string().when("phoneNumber", {
-    is: Joi.exist(),
-    then: Joi.required(),
-    otherwise: Joi.optional(),
-  }),
   type: Joi.optional(),
 });
 
@@ -39,6 +32,7 @@ const forgotValidation = Joi.object({
   email: Joi.string().required().pattern(emailRegex),
   type: Joi.optional(),
 });
+console.log(forgotValidation, "ppforgotValidation");
 
 const resetValidation = Joi.object({
   password: Joi.string().required(),
