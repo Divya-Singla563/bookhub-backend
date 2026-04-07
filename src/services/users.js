@@ -87,21 +87,17 @@ const verify = async (data) => {
     if (findUser && otpData.type === 1) {
       throw new Error(Messages.en.USER_ALREADY_EXISTS);
     }
-    console.log(findUser, "findUser", otpData, otpData.otp !== hashedOtp);
 
     if (otpData && otpData.otp !== hashedOtp) {
-      console.log("chalaa");
 
       throw new Error(Messages.en.INVALID_OTP);
     }
-    console.log("chalaa 2");
     if (otpData) {
       const user = await Modals.User.findOneAndUpdate(
         { email },
         { isEmailVerified: true },
         { returnDocument: "after", lean: true },
       );
-      console.log("chalaa 3");
       if (!user) {
         throw new Error(Messages.en.USER_NOT_FOUND);
       }

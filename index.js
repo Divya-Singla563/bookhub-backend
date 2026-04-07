@@ -10,6 +10,8 @@ import routes from "./src/routes/index.js";
 import requestLogger from "./src/middlewares/request-logger.js";
 import errorHandler from "./src/middlewares/error-handler.js";
 import cookieParser from "cookie-parser";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger.js';
 
 const app = express();
 
@@ -23,7 +25,7 @@ app.use(languageMiddleware);
 //routes
 app.use("/api", routes);
 
-app.use(errorHandler); //centralized error logging
+// app.use(errorHandler); //centralized error logging
 
 // global error handler
 app.use((error, req, res, next) => {
@@ -37,6 +39,9 @@ app.use((error, req, res, next) => {
       Messages.en.SOMETHING_WENT_WRONG,
   });
 });
+
+// Swagger route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

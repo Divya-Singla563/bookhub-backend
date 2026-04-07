@@ -5,6 +5,7 @@ import {
   updateMyBook,
   deleteBook,
 } from "./books.js";
+import { addCategory, getCategories, updateCategory, deleteCategory } from "./category.js";
 import { uploadImage } from "./upload.js";
 import {
   signUp,
@@ -34,4 +35,10 @@ export {
   getMyBookById,
   updateMyBook,
   deleteBook,
+
+  //category
+  addCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory
 };
