@@ -12,6 +12,8 @@ import errorHandler from "./src/middlewares/error-handler.js";
 import cookieParser from "cookie-parser";
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger.js';
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 
@@ -20,10 +22,19 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(languageMiddleware);
+// app.use(helmet())
+// {
+//   // contentSecurityPolicy: false,
+// }
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 3,
+  message: 'Too many requests'
+})
 // app.use(requestLogger); // automatic request logging
 
 //routes
-app.use("/api", routes);
+app.use("/api", limiter, routes);
 
 // app.use(errorHandler); //centralized error logging
 
