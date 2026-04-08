@@ -21,4 +21,18 @@ const sendEmail = async (to, OTP) => {
   }
 };
 
-export { sendEmail };
+const sendResetEmail = async (to, resetUrl) => {
+  try {
+    await transport.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject: "OTP for sign up for BookHub",
+      html: `<a href="${resetUrl}">Reset Password</a>`,
+
+    });
+  } catch (error) {
+    console.error("OTP not sent:", error);
+  }
+};
+
+export { sendEmail, sendResetEmail };

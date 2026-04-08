@@ -15,20 +15,22 @@ import swaggerSpec from './swagger.js';
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
+
 const app = express();
 
 //middlewares
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(languageMiddleware);
-// app.use(helmet())
+app.use(helmet())
 // {
 //   // contentSecurityPolicy: false,
 // }
 const limiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 3,
+  windowMs: 15 * 60 * 1000,
+  max: 50,
   message: 'Too many requests'
 })
 // app.use(requestLogger); // automatic request logging
@@ -36,6 +38,8 @@ const limiter = rateLimit({
 //routes
 app.use("/api", limiter, routes);
 
+app.set("view engine", "ejs");
+// app.set("views", path.join(process.cwd(), "views"));
 // app.use(errorHandler); //centralized error logging
 
 // global error handler

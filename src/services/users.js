@@ -284,6 +284,17 @@ const changePassword = async (body, id) => {
   }
 };
 
+const forgotPasswordEJS = async (body) => {
+  const { email } = body;
+
+};
+
+
+const resetPasswordEJS = async (body) => {
+
+
+};
+
 export {
   signUp,
   verify,
@@ -293,4 +304,6 @@ export {
   forgotPassword,
   resetPassword,
   changePassword,
+  forgotPasswordEJS,
+  resetPasswordEJS
 };

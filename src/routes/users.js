@@ -173,7 +173,8 @@ router.post("/forgot-password", Controllers.forgotPassword);
  *       200:
  *         description: Password updated
  */
-router.post("/reset-password", authVerify, Controllers.resetPassword);
+
+router.post("/reset-password/:token", Controllers.resetPassword);
 
 /**
  * @swagger
@@ -200,5 +201,16 @@ router.post("/reset-password", authVerify, Controllers.resetPassword);
  *         description: Password changed successfully
  */
 router.post("/change-password", authVerify, Controllers.changePassword);
+
+router.get("/reset-password-link/:token", (req, res) => {
+    console.log(req.params.token, 'req.params.token req.params.token ');
+
+    res.render("reset-password", { token: req.params.token });
+});
+
+
+router.post("/forgot-password-link", Controllers.forgotPasswordEJS);
+router.post("/reset-password-link/:token", Controllers.resetPasswordEJS);
+
 
 export default router;
