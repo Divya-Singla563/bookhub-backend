@@ -1,4 +1,4 @@
-import { sendEmail } from "./mailer.js";
+import { sendEmail, sendResetEmail } from "./mailer.js";
 import {
   generateToken,
   verifyToken,
@@ -12,4 +12,5 @@ export {
   verifyToken,
   hashOTP,
   generateAndSaveRefreshToken,
+  sendResetEmail
 };

@@ -154,8 +154,9 @@ const forgotPasswordEJS = async (req, res, next) => {
     if (error) {
       res.status(400).json({ message: error.details[0].message });
     }
-
-    const result = await Services.forgotPassword(req.body);
+    // build origin here (controller responsibility)
+    const origin = `${req.protocol}://${req.get("host")}`;
+    const result = await Services.forgotPasswordEJS(req.body, origin);
 
     return res.status(200).json({ message: result.message, data: result.data });
   } catch (error) {
@@ -163,71 +164,17 @@ const forgotPasswordEJS = async (req, res, next) => {
   }
 };
 
+const resetPasswordEJS = async (req, res, next) => {
+  try {
+    const token = req.params.token;
+    const { password } = req.body;
 
-// const forgotPasswordEJS = async (req, res) => {
-//   const { email } = req.body;
+    const result = await Services.resetPasswordEJS(token, password);
 
-//   const user = await Modals.User.findOne({ email });
-//   if (!user) return res.send("User not found");
-
-//   // create token
-//   const resetToken = crypto.randomBytes(32).toString("hex");
-
-//   // hash token
-//   const hashedToken = crypto
-//     .createHash("sha256")
-//     .update(resetToken)
-//     .digest("hex");
-
-//   user.resetPasswordToken = hashedToken;
-//   user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 min
-
-//   await user.save();
-
-//   const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/reset-password-link/${resetToken}`;
-//   console.log("Reset URL:", resetUrl); // later send email
-//   if (email) {
-//     await sendResetEmail(email, resetUrl);
-//   }
-//   res.send("Reset link sent");
-// };
-
-const resetPasswordEJS = async (req, res) => {
-  const token = req.params.token;
-  console.log(token, 'token');
-
-  const { password } = req.body;
-
-  if (!password) {
-    return res.send("Password is required");
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
-
-  // HASH incoming token
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(token)
-    .digest("hex");
-
-  console.log("Incoming token:", token);
-  console.log("Hashed token:", hashedToken);
-
-  const user = await Modals.User.findOne({
-    resetPasswordToken: hashedToken,
-    resetPasswordExpire: { $gt: Date.now() },
-  });
-
-  console.log(user, 'user', hashedToken, req.body);
-
-
-  if (!user) return res.send("Token invalid or expired");
-
-  user.password = req.body.password;
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
-
-  await user.save();
-
-  res.send("Password reset successful");
 };
 
 export {

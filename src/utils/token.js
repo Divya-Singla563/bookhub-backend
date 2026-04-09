@@ -17,6 +17,10 @@ const hashOTP = (otp) => {
   return crypto.createHash("sha256").update(String(otp)).digest("hex");
 };
 
+const hashToken = (token) => {
+  return crypto.createHash("sha256").update(token).digest("hex");
+};
+
 // export const refreshToken = (req, res) => {
 //   const token = req.cookies.refreshToken;
 
@@ -35,4 +39,4 @@ const hashOTP = (otp) => {
 //   });
 // };
 
-export { generateToken, verifyToken, hashOTP, generateAndSaveRefreshToken };
+export { generateToken, verifyToken, hashOTP, generateAndSaveRefreshToken, hashToken };
