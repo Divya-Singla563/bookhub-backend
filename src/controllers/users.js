@@ -1,9 +1,7 @@
 import * as Validations from "../validations/index.js";
 import * as Services from "../services/index.js";
 import { Messages } from "../constants/index.js";
-import * as Modals from "../modals/index.js";
-import crypto from "crypto";
-import { sendResetEmail } from "../utils/mailer.js";
+import { generateToken, verifyToken } from "../utils/token.js";
 
 const signUp = async (req, res, next) => {
   try {
@@ -58,7 +56,7 @@ const login = async (req, res, next) => {
     res.cookie("refreshToken", result.data.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "strict", //lax
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -177,6 +175,25 @@ const resetPasswordEJS = async (req, res, next) => {
   }
 };
 
+const createRefreshToken = async (req, res, next) => {
+  const refreshToken = req.cookies.refreshToken
+  try {
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = await verifyToken(refreshToken, process.env.REFRESH_JWT_SECRET);
+
+    const newAccessToken = generateToken({ _id: decoded._id, role: decoded.role }, process.env.JWT_SECRET, '2d');
+
+    return res.status(200).json({ message: "Token refreshed successfully", data: { accessToken: newAccessToken } });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   signUp,
   verify,
@@ -187,5 +204,6 @@ export {
   resetPassword,
   changePassword,
   forgotPasswordEJS,
-  resetPasswordEJS
+  resetPasswordEJS,
+  createRefreshToken
 };

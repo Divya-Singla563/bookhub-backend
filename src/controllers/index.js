@@ -17,7 +17,8 @@ import {
   resetPassword,
   changePassword,
   forgotPasswordEJS,
-  resetPasswordEJS
+  resetPasswordEJS,
+  createRefreshToken
 } from "./users.js";
 
 export {
@@ -31,6 +32,7 @@ export {
   changePassword,
   forgotPasswordEJS,
   resetPasswordEJS,
+  createRefreshToken,
   //
   uploadImage,
   //books

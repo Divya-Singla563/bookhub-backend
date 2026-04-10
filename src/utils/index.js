@@ -3,7 +3,6 @@ import {
   generateToken,
   verifyToken,
   hashOTP,
-  generateAndSaveRefreshToken,
 } from "./token.js";
 
 export {
@@ -11,6 +10,5 @@ export {
   generateToken,
   verifyToken,
   hashOTP,
-  generateAndSaveRefreshToken,
   sendResetEmail
 };

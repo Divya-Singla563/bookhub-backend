@@ -6,7 +6,6 @@ import {
   generateToken,
   hashOTP,
   sendEmail,
-  generateAndSaveRefreshToken,
   sendResetEmail,
 } from "../utils/index.js";
 import crypto from "crypto";
@@ -107,10 +106,11 @@ const verify = async (data) => {
 
       await Modals.OTP.deleteOne({ email });
 
-      const token = generateToken({ _id: user._id, role: user.role });
-      const refreshToken = await generateAndSaveRefreshToken({
+      const token = generateToken({ _id: user._id, role: user.role }, process.env.JWT_SECRET, '2d');
+      const refreshToken = await generateToken({
         _id: user?._id,
-      });
+        role: user.role
+      }, process.env.REFRESH_JWT_SECRET, '7d');
 
       return {
         message: Messages.en.OTP_VERIFIED,
@@ -152,11 +152,12 @@ const login = async (body) => {
     const token = generateToken({
       _id: userExisted._id,
       role: userExisted.role,
-    });
+    }, process.env.JWT_SECRET, '2d');
 
-    const refreshToken = await generateAndSaveRefreshToken({
+    const refreshToken = await generateToken({
       _id: userExisted?._id,
-    });
+      role: userExisted.role
+    }, process.env.REFRESH_JWT_SECRET, '7d');
 
     return {
       message: "get data",

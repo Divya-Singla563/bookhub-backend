@@ -209,6 +209,7 @@ router.get("/reset-password-link/:token", (req, res) => {
 
 router.post("/forgot-password-link", Controllers.forgotPasswordEJS);
 router.post("/reset-password-link/:token", Controllers.resetPasswordEJS);
+router.get("/refresh-token", Controllers.createRefreshToken);
 
 
 export default router;
