@@ -10,6 +10,7 @@ import {
 } from "../utils/index.js";
 import crypto from "crypto";
 import { hashToken } from "../utils/token.js";
+import redisClient from "../config/redis-config.js";
 
 const signUp = async (data) => {
   try {
@@ -91,7 +92,6 @@ const verify = async (data) => {
     }
 
     if (otpData && otpData.otp !== hashedOtp) {
-
       throw new Error(Messages.en.INVALID_OTP);
     }
     if (otpData) {
@@ -106,11 +106,19 @@ const verify = async (data) => {
 
       await Modals.OTP.deleteOne({ email });
 
-      const token = generateToken({ _id: user._id, role: user.role }, process.env.JWT_SECRET, '2d');
-      const refreshToken = await generateToken({
-        _id: user?._id,
-        role: user.role
-      }, process.env.REFRESH_JWT_SECRET, '7d');
+      const token = generateToken(
+        { _id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        "2d",
+      );
+      const refreshToken = await generateToken(
+        {
+          _id: user?._id,
+          role: user.role,
+        },
+        process.env.REFRESH_JWT_SECRET,
+        "7d",
+      );
 
       return {
         message: Messages.en.OTP_VERIFIED,
@@ -149,15 +157,23 @@ const login = async (body) => {
 
     delete userExisted.password;
 
-    const token = generateToken({
-      _id: userExisted._id,
-      role: userExisted.role,
-    }, process.env.JWT_SECRET, '2d');
+    const token = generateToken(
+      {
+        _id: userExisted._id,
+        role: userExisted.role,
+      },
+      process.env.JWT_SECRET,
+      "2d",
+    );
 
-    const refreshToken = await generateToken({
-      _id: userExisted?._id,
-      role: userExisted.role
-    }, process.env.REFRESH_JWT_SECRET, '7d');
+    const refreshToken = await generateToken(
+      {
+        _id: userExisted?._id,
+        role: userExisted.role,
+      },
+      process.env.REFRESH_JWT_SECRET,
+      "7d",
+    );
 
     return {
       message: "get data",
@@ -211,9 +227,12 @@ const forgotPassword = async (body) => {
     }
 
     let OTP = 1234;
+    const key = `otp:${email}`;
+    console.log(key, "key==", OTP);
+
     const hashedOtp = hashOTP(OTP);
     const expiresAt = dayjs().add(10, "minutes").toDate();
-
+    await redisClient.set(key, String(OTP), { EX: 60 });
     await Modals.OTP.findOneAndUpdate(
       { email },
       { otp: hashedOtp, expiresAt, type },
@@ -292,16 +311,16 @@ const forgotPasswordEJS = async (body, origin) => {
   const { email } = body;
 
   try {
-    const user = await Modals.User.findOne({ email })
+    const user = await Modals.User.findOne({ email });
     if (!user) {
-      throw new Error("User not found")
+      throw new Error("User not found");
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
 
-    const hashedToken = hashToken(resetToken)
+    const hashedToken = hashToken(resetToken);
 
-    user.resetPasswordToken = hashedToken
+    user.resetPasswordToken = hashedToken;
     user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 min
 
     await user.save();
@@ -312,17 +331,11 @@ const forgotPasswordEJS = async (body, origin) => {
     await sendResetEmail(email, resetUrl);
     return {
       message: "Reset link sent",
-
     };
-
   } catch (error) {
     throw error;
   }
-
 };
-
-
-
 
 const resetPasswordEJS = async (token, password) => {
   if (!password) {
@@ -333,8 +346,7 @@ const resetPasswordEJS = async (token, password) => {
   }
 
   // 1. hash token
-  const hashedToken = hashToken(token)
-
+  const hashedToken = hashToken(token);
 
   // 2. find user
   const user = await Modals.User.findOne({
@@ -362,7 +374,6 @@ const resetPasswordEJS = async (token, password) => {
   };
 };
 
-
 export {
   signUp,
   verify,
@@ -373,5 +384,5 @@ export {
   resetPassword,
   changePassword,
   forgotPasswordEJS,
-  resetPasswordEJS
+  resetPasswordEJS,
 };

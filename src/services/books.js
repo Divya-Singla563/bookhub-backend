@@ -4,13 +4,15 @@ import * as Modals from "../modals/index.js";
 const addBook = async (data, userId) => {
   try {
     if (data.ISBN) {
+      console.log(data.ISBN, "----");
+
       const existingISBN = await Modals.Book.findOne({
         ISBN: data.ISBN,
         user: userId,
       }).lean();
 
       if (existingISBN) {
-        throw new Error("Book already exists for this user");
+        throw new Error("Book already exists for this user with same ISBN");
       }
     }
     const book = await Modals.Book.create({

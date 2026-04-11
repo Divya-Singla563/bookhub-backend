@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as Controllers from "../controllers/index.js";
 import { authVerify } from "../middlewares/token-verification.js";
 import authorise from "../middlewares/authorise.js";
+import redisCache from "../middlewares/redis-cache.js";
 
 const router = Router();
 
@@ -75,6 +76,7 @@ router.get(
   "/my-books",
   authVerify,
   authorise("user"),
+  redisCache,
   Controllers.getUserBooks,
 );
 
