@@ -3,7 +3,7 @@ import * as Controllers from "../controllers/index.js";
 import { authVerify } from "../middlewares/token-verification.js";
 import authorise from "../middlewares/authorise.js";
 
-const router = Router()
+const router = Router();
 
 /**
  * @swagger
@@ -38,7 +38,12 @@ const router = Router()
  *       200:
  *         description: Category added successfully
  */
-router.post('/category', authVerify, authorise('admin',), Controllers.addCategory)
+router.post(
+  "/category",
+  authVerify,
+  authorise("admin"),
+  Controllers.addCategory,
+);
 
 /**
  * @swagger
@@ -61,7 +66,7 @@ router.post('/category', authVerify, authorise('admin',), Controllers.addCategor
  *       200:
  *         description: List of categories
  */
-router.get('/category', Controllers.getCategories)
+router.get("/category", Controllers.getCategories);
 
 /**
  * @swagger
@@ -96,7 +101,12 @@ router.get('/category', Controllers.getCategories)
  *       200:
  *         description: Category updated successfully
  */
-router.put('/category/:id', authVerify, authorise('admin',), Controllers.updateCategory)
+router.put(
+  "/category/:id",
+  authVerify,
+  authorise("admin"),
+  Controllers.updateCategory,
+);
 
 /**
  * @swagger
@@ -117,6 +127,16 @@ router.put('/category/:id', authVerify, authorise('admin',), Controllers.updateC
  *       200:
  *         description: Category deleted successfully
  */
-router.delete('/category/:id', authVerify, authorise('admin',), Controllers.deleteCategory)
+router.delete(
+  "/category/:id",
+  authVerify,
+  authorise("admin"),
+  Controllers.deleteCategory,
+);
 
-export default router
+router.post("/template", Controllers.addFaq);
+router.put("/template/:id", Controllers.updateFaq);
+router.get("/template", Controllers.getTemplates);
+router.delete("/template/:id", Controllers.deleteFaqTemplate);
+
+export default router;

@@ -10,7 +10,7 @@ import {
 } from "../utils/index.js";
 import crypto from "crypto";
 import { hashToken } from "../utils/token.js";
-import redisClient from "../config/redis-config.js";
+// import redisClient from "../config/redis-config.js";
 
 const signUp = async (data) => {
   try {
@@ -232,7 +232,7 @@ const forgotPassword = async (body) => {
 
     const hashedOtp = hashOTP(OTP);
     const expiresAt = dayjs().add(10, "minutes").toDate();
-    await redisClient.set(key, String(OTP), { EX: 60 });
+    // await redisClient.set(key, String(OTP), { EX: 60 });
     await Modals.OTP.findOneAndUpdate(
       { email },
       { otp: hashedOtp, expiresAt, type },

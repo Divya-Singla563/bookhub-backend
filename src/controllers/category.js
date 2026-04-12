@@ -9,20 +9,23 @@ const addCategory = async (req, res, next) => {
     }
 
     const result = await Services.addCategory(req.body);
-    return res.status(200).json({ message: result.message, data: result.data })
+    return res.status(200).json({ message: result.message, data: result.data });
   } catch (error) {
     next(error);
   }
 };
 
 const getCategories = async (req, res, next) => {
-  const limit = parseInt(req.query.limit) || 10;
-  const page = parseInt(req.query.page) || 1;
+  try {
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
 
-  const result = await Services.getCategories(limit, page)
-  return res.status(200).json(result)
-
-}
+    const result = await Services.getCategories(limit, page);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const updateCategory = async (req, res, next) => {
   try {
@@ -32,19 +35,64 @@ const updateCategory = async (req, res, next) => {
     }
 
     const result = await Services.updateCategory(req.body, req.params.id);
-    return res.status(200).json({ message: result.message, data: result.data })
+    return res.status(200).json({ message: result.message, data: result.data });
   } catch (error) {
     next(error);
   }
-}
+};
 
 const deleteCategory = async (req, res, next) => {
   try {
     const result = await Services.deleteCategory(req.params.id);
-    return res.status(200).json({ message: result.message, data: result.data })
+    return res.status(200).json({ message: result.message, data: result.data });
   } catch (error) {
     next(error);
   }
-}
+};
 
-export { addCategory, getCategories, updateCategory, deleteCategory };
+const addFaq = async (req, res, next) => {
+  try {
+    const result = await Services.addFaq(req.body);
+    return res.status(200).json({ message: result.message, data: result.data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTemplates = async (req, res, next) => {
+  try {
+    const result = await Services.getTemplates();
+    return res.status(200).json({ message: result.message, data: result.data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateFaq = async (req, res, next) => {
+  try {
+    const result = await Services.updateFaq(req.body, req.params.id);
+    return res.status(200).json({ message: result.message, data: result.data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteFaqTemplate = async (req, res, next) => {
+  try {
+    const result = await Services.deleteFaqTemplate(req.params.id);
+    return res.status(200).json({ message: result.message, data: result.data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  addCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+  addFaq,
+  getTemplates,
+  updateFaq,
+  deleteFaqTemplate,
+};

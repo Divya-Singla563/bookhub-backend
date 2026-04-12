@@ -5,7 +5,16 @@ import {
   updateMyBook,
   deleteBook,
 } from "./books.js";
-import { addCategory, getCategories, updateCategory, deleteCategory } from "./category.js";
+import {
+  addCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+  addFaq,
+  getTemplates,
+  updateFaq,
+  deleteFaqTemplate,
+} from "./category.js";
 import {
   signUp,
   verify,
@@ -16,7 +25,7 @@ import {
   resetPassword,
   changePassword,
   forgotPasswordEJS,
-  resetPasswordEJS
+  resetPasswordEJS,
 } from "./users.js";
 
 export {
@@ -40,5 +49,9 @@ export {
   addCategory,
   getCategories,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  addFaq,
+  getTemplates,
+  updateFaq,
+  deleteFaqTemplate,
 };

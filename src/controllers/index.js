@@ -5,7 +5,16 @@ import {
   updateMyBook,
   deleteBook,
 } from "./books.js";
-import { addCategory, getCategories, updateCategory, deleteCategory } from "./category.js";
+import {
+  addCategory,
+  getCategories,
+  updateCategory,
+  deleteCategory,
+  addFaq,
+  getTemplates,
+  updateFaq,
+  deleteFaqTemplate,
+} from "./category.js";
 import { uploadImage } from "./upload.js";
 import {
   signUp,
@@ -18,7 +27,7 @@ import {
   changePassword,
   forgotPasswordEJS,
   resetPasswordEJS,
-  createRefreshToken
+  createRefreshToken,
 } from "./users.js";
 
 export {
@@ -41,10 +50,13 @@ export {
   getMyBookById,
   updateMyBook,
   deleteBook,
-
+  addFaq,
+  getTemplates,
+  updateFaq,
+  deleteFaqTemplate,
   //category
   addCategory,
   getCategories,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 };
