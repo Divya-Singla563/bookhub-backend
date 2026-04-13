@@ -79,6 +79,8 @@ const updateFaq = async (req, res, next) => {
 
 const deleteFaqTemplate = async (req, res, next) => {
   try {
+    console.log(req.params.id, 'req.params.idreq.params.id');
+
     const result = await Services.deleteFaqTemplate(req.params.id);
     return res.status(200).json({ message: result.message, data: result.data });
   } catch (error) {

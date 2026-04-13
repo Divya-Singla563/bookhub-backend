@@ -203,8 +203,30 @@ const updateFaq = async (data, templateId) => {
   }
 };
 
+// const deleteFaqTemplate = async (templateId) => {
 
+//   try {
+//     await Modals.Faq.deleteMany({ templateId });
+
+//     const deletedTemplate = await Modals.FaqTemplate.findByIdAndDelete(templateId);
+
+//     if (!deletedTemplate) {
+//       throw new Error("Template not found");
+//     }
+
+//     return {
+//       message: "Template and its FAQs deleted successfully",
+//     };
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+
+//rollback code but require replica set
 const deleteFaqTemplate = async (templateId) => {
+  console.log(templateId, 'templateIdtemplateId');
+
   const session = await mongoose.startSession();
 
   try {
