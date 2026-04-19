@@ -45,6 +45,13 @@ router.post(
   Controllers.addCategory,
 );
 
+router.post(
+  "/sub-category",
+  authVerify,
+  authorise("admin"),
+  Controllers.addSubCategory,
+);
+
 /**
  * @swagger
  * /api/category:
@@ -67,6 +74,7 @@ router.post(
  *         description: List of categories
  */
 router.get("/category", Controllers.getCategories);
+router.get("/sub-category", Controllers.getSubCategories);
 
 /**
  * @swagger
@@ -108,6 +116,12 @@ router.put(
   Controllers.updateCategory,
 );
 
+router.put(
+  "/sub-category/:id",
+  authVerify,
+  authorise("admin"),
+  Controllers.updateSubCategory,
+);
 /**
  * @swagger
  * /api/category/{id}:
@@ -132,6 +146,13 @@ router.delete(
   authVerify,
   authorise("admin"),
   Controllers.deleteCategory,
+);
+
+router.delete(
+  "/sub-category/:id",
+  authVerify,
+  authorise("admin"),
+  Controllers.deleteSubCategory,
 );
 
 router.post("/template", Controllers.addFaq);

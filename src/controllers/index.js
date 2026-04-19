@@ -14,6 +14,10 @@ import {
   getTemplates,
   updateFaq,
   deleteFaqTemplate,
+  addSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 } from "./category.js";
 import { uploadImage } from "./upload.js";
 import {
@@ -59,4 +63,8 @@ export {
   getCategories,
   updateCategory,
   deleteCategory,
+  addSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 };

@@ -14,6 +14,10 @@ import {
   getTemplates,
   updateFaq,
   deleteFaqTemplate,
+  addSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 } from "./category.js";
 import {
   signUp,
@@ -54,4 +58,8 @@ export {
   getTemplates,
   updateFaq,
   deleteFaqTemplate,
+  addSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 };

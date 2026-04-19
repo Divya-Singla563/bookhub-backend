@@ -24,17 +24,19 @@ const getUserBooks = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status;
+
     const result = await Services.getUserBooks(
       req.user._id,
       page,
       limit,
       req.query.search,
+      status,
     );
 
     return res.status(200).json(result);
   } catch (error) {
     console.log(error);
-
     next(error);
   }
 };
@@ -52,11 +54,11 @@ const getMyBookById = async (req, res, next) => {
 
 const updateMyBook = async (req, res, next) => {
   try {
-    const { error } = await Validations.addBook.validate(req.body);
+    // const { error } = await Validations.addBook.validate(req.body);
 
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
+    // if (error) {
+    //   return res.status(400).json({ message: error.details[0].message });
+    // }
 
     const result = await Services.updateMyBook(
       req.body,

@@ -1,5 +1,6 @@
 import { addBook } from "./books.js";
-import { category } from "./category.js";
+import { category,subCategory } from "./category.js";
+
 import {
   loginValidation,
   otpVerification,
@@ -20,4 +21,5 @@ export {
   //books
   addBook,
   category,
+  subCategory
 };

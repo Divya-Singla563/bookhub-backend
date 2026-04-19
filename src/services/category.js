@@ -14,6 +14,19 @@ const addCategory = async (data) => {
   }
 };
 
+const addSubCategory = async (data) => {
+  try {
+    const subCategory = await Modals.SubCategory.create(data);
+
+    return {
+      message: "Sub-Category added successfully",
+      data: subCategory,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getCategories = async (limit, page) => {
   try {
     const skip = (page - 1) * limit;
@@ -23,6 +36,24 @@ const getCategories = async (limit, page) => {
     return {
       message: "Categories fetched successfully",
       data: categories,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getSubCategories = async (limit, page) => {
+  try {
+    const skip = (page - 1) * limit;
+
+    const subCategory = await Modals.SubCategory.find()
+      .skip(skip)
+      .limit(limit)
+      .populate("categoryId");
+
+    return {
+      message: "subCategory fetched successfully",
+      data: subCategory,
     };
   } catch (error) {
     throw error;
@@ -53,10 +84,43 @@ const updateCategory = async (data, categoryId) => {
   }
 };
 
+const updateSubCategory = async (data, categoryId) => {
+  try {
+    const updatedSubCategory = await Modals.SubCategory.findByIdAndUpdate(
+      categoryId,
+      data,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!updatedSubCategory) {
+      throw new Error("SubCategory not found");
+    }
+
+    return {
+      message: "SubCategory updated successfully",
+      data: updatedSubCategory,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const deleteCategory = async (categoryId) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(categoryId)) {
       throw new Error("Category id not valid");
+    }
+
+    // ✅ efficient check (no full data fetch)
+    const hasSubCategory = await Modals.SubCategory.exists({
+      categoryId,
+    }).lean();
+
+    if (hasSubCategory) {
+      throw new Error("Sub category existed ");
     }
     const deletedCategory = await Modals.Category.findByIdAndDelete(categoryId);
 
@@ -66,6 +130,26 @@ const deleteCategory = async (categoryId) => {
 
     return {
       message: "Category deleted successfully",
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteSubCategory = async (categoryId) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+      throw new Error("SubCategory id not valid");
+    }
+    const deletedCategory =
+      await Modals.SubCategory.findByIdAndDelete(categoryId);
+
+    if (!deletedCategory) {
+      throw new Error("SubCategory not found");
+    }
+
+    return {
+      message: "SubCategory deleted successfully",
     };
   } catch (error) {
     throw error;
@@ -203,7 +287,6 @@ const updateFaq = async (data, templateId) => {
   }
 };
 
-
 const deleteFaqTemplate = async (templateId) => {
   const session = await mongoose.startSession();
 
@@ -211,15 +294,12 @@ const deleteFaqTemplate = async (templateId) => {
     session.startTransaction();
 
     // ✅ 1. Delete all FAQs of this template
-    await Modals.Faq.deleteMany(
-      { templateId },
-      { session }
-    );
+    await Modals.Faq.deleteMany({ templateId }, { session });
 
     // ✅ 2. Delete the template
     const deletedTemplate = await Modals.FaqTemplate.findByIdAndDelete(
       templateId,
-      { session }
+      { session },
     );
 
     // ❗ If template not found → force rollback
@@ -251,5 +331,9 @@ export {
   addFaq,
   getTemplates,
   updateFaq,
-  deleteFaqTemplate
+  deleteFaqTemplate,
+  addSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 };

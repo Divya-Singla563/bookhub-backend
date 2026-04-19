@@ -3,7 +3,14 @@ import Joi from "joi";
 const category = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
-  image: Joi.string().required(),
+  image: Joi.string().optional(),
 });
 
-export { category };
+const subCategory = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  image: Joi.string().optional(),
+  categoryId: Joi.string().required(),
+});
+
+export { category, subCategory };
