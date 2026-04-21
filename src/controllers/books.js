@@ -20,26 +20,8 @@ const addBook = async (req, res, next) => {
   }
 };
 
-const getUserBooks = async (req, res, next) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const status = req.query.status;
 
-    const result = await Services.getUserBooks(
-      req.user._id,
-      page,
-      limit,
-      req.query.search,
-      status,
-    );
 
-    return res.status(200).json(result);
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
 
 const getMyBookById = async (req, res, next) => {
   try {
@@ -82,4 +64,58 @@ const deleteBook = async (req, res, next) => {
   }
 };
 
-export { addBook, getUserBooks, getMyBookById, updateMyBook, deleteBook };
+const getUserBooks = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status;
+
+    const result = await Services.getUserBooks(
+      req.user._id,
+      page,
+      limit,
+      req.query.search,
+      status,
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const updateBookStatus = async (req, res, next) => {
+  try {
+    const result = await Services.updateBookStatus(req.body, req.params.id, req.user._id);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+const getAllBooks = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const result = await Services.getAllBooks(
+      req.user._id,
+      page,
+      limit,
+      req.query.search,
+    );
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+
+
+
+export { addBook, getUserBooks, getMyBookById, updateMyBook, deleteBook, getAllBooks, updateBookStatus };

@@ -42,6 +42,13 @@ const router = Router();
  *         description: Book added successfully
  */
 router.post("/book", authVerify, authorise("user"), Controllers.addBook);
+router.get(
+  "/books",
+  authVerify,
+  authorise("user"),
+  Controllers.getAllBooks
+);
+router.put("/update-book-status/:id", authVerify, authorise("user"), Controllers.updateBookStatus);
 
 /**
  * @swagger

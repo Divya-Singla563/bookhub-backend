@@ -140,4 +140,70 @@ const deleteBook = async (userId, bookId) => {
   }
 };
 
-export { addBook, getUserBooks, getMyBookById, updateMyBook, deleteBook };
+const updateBookStatus = async (data, bookId, userId) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
+      throw new Error("Invalid book");
+    }
+
+    const updatedBook = await Modals.UserBook.findOneAndUpdate(
+      {
+        user: userId,
+        book: bookId,
+      },
+      {
+        $set: { status: data.status },
+        $setOnInsert: { user: userId, book: bookId },
+      },
+      {
+        new: true,
+        upsert: true,
+        runValidators: true,
+      },
+    )
+      .populate({ path: "book", select: "title ISBN" })
+      .populate({ path: "user", select: "email name" })
+      .lean();
+
+    return {
+      message: "Book status updated successfully",
+      data: updatedBook,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ Service (Aggregation Pipeline)
+const getAllBooks = async (page, limit, search) => {
+  try {
+    const query = {};
+
+    if (search) {
+      query.$text = { $search: search };
+    }
+    const skip = (page - 1) * limit;
+
+
+
+    const books = await Modals.Book.aggregate([
+      { $sort: { createdAt: -1 } },
+
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export {
+  addBook,
+  getUserBooks,
+  getMyBookById,
+  updateMyBook,
+  deleteBook,
+  getAllBooks,
+  updateBookStatus,
+};

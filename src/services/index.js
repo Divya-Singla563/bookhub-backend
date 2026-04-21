@@ -4,6 +4,8 @@ import {
   getMyBookById,
   updateMyBook,
   deleteBook,
+  getAllBooks,
+  updateBookStatus
 } from "./books.js";
 import {
   addCategory,
@@ -62,4 +64,6 @@ export {
   getSubCategories,
   updateSubCategory,
   deleteSubCategory,
+  getAllBooks,
+  updateBookStatus
 };

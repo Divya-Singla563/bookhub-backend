@@ -1,13 +1,9 @@
 import mongoose from "mongoose";
-import { BOOKS_READ_STATUS } from "../constants/enums.js";
+import { BOOKS_STATUS } from "../constants/enums.js";
 
 const booksSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+
 
     title: {
       type: String,
@@ -48,8 +44,13 @@ const booksSchema = new mongoose.Schema(
     ],
     status: {
       type: Number,
-      enum: Object.values(BOOKS_READ_STATUS),
-      default: BOOKS_READ_STATUS.ACTIVE,
+      enum: Object.values(BOOKS_STATUS),
+      default: BOOKS_STATUS.ACTIVE,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   { timestamps: true },
