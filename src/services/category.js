@@ -317,7 +317,6 @@ const deleteFaqTemplate = async (templateId) => {
       message: "Template and its FAQs deleted successfully",
     };
   } catch (error) {
-    // ❌ Rollback all changes
     await session.abortTransaction();
     session.endSession();
 
