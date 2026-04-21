@@ -323,6 +323,7 @@ const deleteFaqTemplate = async (templateId) => {
 
     throw error;
   }
+
 };
 
 export {
