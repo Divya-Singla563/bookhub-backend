@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { BOOKS_READ_STATUS } from "../constants/enums.js";
 
 const booksSchema = new mongoose.Schema(
   {
@@ -39,13 +40,17 @@ const booksSchema = new mongoose.Schema(
       enum: ["new", "old"],
       default: "old",
     },
-
     images: [
       {
         url: String,
         public_id: String,
       },
     ],
+    status: {
+      type: Number,
+      enum: Object.values(BOOKS_READ_STATUS),
+      default: BOOKS_READ_STATUS.ACTIVE,
+    },
   },
   { timestamps: true },
 );

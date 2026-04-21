@@ -30,12 +30,16 @@ const addBook = async (data, userId) => {
   }
 };
 
-const getUserBooks = async (userId, page, limit, search) => {
+const getUserBooks = async (userId, page, limit, search, status) => {
   try {
     const query = { user: userId };
 
     if (search) {
       query.$text = { $search: search };
+    }
+
+    if (status) {
+      query.status = Number(status);
     }
 
     const books = await Modals.Book.find(query)
@@ -104,7 +108,7 @@ const updateMyBook = async (data, bookId, userId) => {
     ).lean();
 
     if (!updatedBook) {
-      throw new Error("Book now found");
+      throw new Error("Book not found");
     }
 
     return {
