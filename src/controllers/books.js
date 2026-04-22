@@ -125,6 +125,24 @@ const getMyLibrary = async (req, res, next) => {
   }
 };
 
+const toggleWishlist = async (req, res, next) => {
+  try {
+    const result = await Services.toggleWishlist(req.user._id, req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getMyWishlist = async (req, res, next) => {
+  try {
+    const result = await Services.getMyWishlist(req.user._id);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   addBook,
   getUserBooks,
@@ -134,4 +152,6 @@ export {
   getAllBooks,
   updateBookStatus,
   getMyLibrary,
+  toggleWishlist,
+  getMyWishlist,
 };

@@ -7,6 +7,8 @@ import {
   getAllBooks,
   updateBookStatus,
   getMyLibrary,
+  toggleWishlist,
+  getMyWishlist,
 } from "./books.js";
 import {
   addCategory,
@@ -68,4 +70,6 @@ export {
   getAllBooks,
   updateBookStatus,
   getMyLibrary,
+  toggleWishlist,
+  getMyWishlist,
 };

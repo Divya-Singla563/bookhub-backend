@@ -56,6 +56,19 @@ router.put(
   Controllers.updateBookStatus,
 );
 
+router.put(
+  "/wishlist/:id",
+  authVerify,
+  authorise("user"),
+  Controllers.toggleWishlist,
+);
+
+router.get(
+  "/my-wishlist",
+  authVerify,
+  authorise("user"),
+  Controllers.getMyWishlist,
+);
 /**
  * @swagger
  * /api/my-books:

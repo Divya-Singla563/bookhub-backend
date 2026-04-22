@@ -6,6 +6,16 @@ import FaqTemplate from "./faq-template.js";
 import Faq from "./faq.js";
 import SubCategory from "./sub-category.js";
 import UserBook from "./userBooks.js";
+import Wishlist from "./wishlist.js";
 
-
-export { User, OTP, Book, Category, FaqTemplate, Faq, SubCategory, UserBook };
+export {
+  User,
+  OTP,
+  Book,
+  Category,
+  FaqTemplate,
+  Faq,
+  SubCategory,
+  UserBook,
+  Wishlist,
+};

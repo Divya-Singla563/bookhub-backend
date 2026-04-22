@@ -286,14 +286,97 @@ const getMyLibrary = async (userId) => {
         },
       },
     ]);
-    console.log(data, "------========data", userId);
 
     return {
       message: "Library fetched successfully",
       data,
     };
   } catch (error) {
-    next(error);
+    throw error;
+  }
+};
+
+const toggleWishlist = async (userId, bookId) => {
+  try {
+    const existing = await Modals.Wishlist.findOne({
+      user: userId,
+      book: bookId,
+    });
+
+    // 2. If exists → remove
+    if (existing) {
+      await Modals.Wishlist.deleteOne({
+        user: userId,
+        book: bookId,
+      });
+
+      return {
+        message: "Removed from wishlist",
+        isWishlisted: false,
+      };
+    }
+
+    // 3. If not exists → add
+    await Modals.Wishlist.create({
+      user: userId,
+      book: bookId,
+    });
+
+    return {
+      message: "Added to wishlist",
+      isWishlisted: true,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getMyWishlist = async (userId) => {
+  try {
+    const data = await Modals.Wishlist.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $sort: { updatedAt: -1 },
+      },
+      {
+        $lookup: {
+          from: "books",
+          localField: "book",
+          foreignField: "_id",
+          as: "bookData",
+        },
+      },
+      {
+        $unwind: "$bookData",
+      },
+      {
+        $addFields: {
+          title: "$bookData.title",
+        },
+      },
+      {
+        $project: {
+          bookData: 0,
+        },
+      },
+    ]);
+
+    const data1 = await Modals.Wishlist.find({ user: userId })
+      .populate("book")
+      .populate("user")
+      .lean();
+
+    console.log(data, "=======data");
+    return {
+      message: "fetched",
+      data: data1,
+    };
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -306,4 +389,6 @@ export {
   getAllBooks,
   updateBookStatus,
   getMyLibrary,
+  toggleWishlist,
+  getMyWishlist,
 };
