@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import * as Modals from "../modals/index.js";
+import { BOOKS_READ_STATUS } from "../constants/enums.js";
 
 const addBook = async (data, userId) => {
   try {
@@ -175,7 +176,7 @@ const updateBookStatus = async (data, bookId, userId) => {
 };
 
 // ✅ Service (Aggregation Pipeline)
-const getAllBooks = async (page, limit, search) => {
+const getAllBooks = async (userId, page, limit, search) => {
   try {
     const query = {};
 
@@ -184,17 +185,115 @@ const getAllBooks = async (page, limit, search) => {
     }
     const skip = (page - 1) * limit;
 
-
-
     const books = await Modals.Book.aggregate([
       { $sort: { createdAt: -1 } },
-
       { $skip: skip },
       { $limit: limit },
+
+      {
+        $lookup: {
+          from: "userbooks",
+          let: { bookId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$book", "$$bookId"] },
+                    { $eq: ["$user", new mongoose.Types.ObjectId(userId)] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "userBook",
+        },
+      },
+
+      // 4. Add status field
+      {
+        $addFields: {
+          status: {
+            $cond: {
+              if: { $gt: [{ $size: "$userBook" }, 0] },
+              then: { $arrayElemAt: ["$userBook.status", 0] },
+              else: BOOKS_READ_STATUS.UNREAD,
+            },
+          },
+        },
+      },
+
+      // 5. Clean extra field
+      {
+        $project: {
+          userBook: 0,
+        },
+      },
     ]);
+
+    return {
+      message: "fetch",
+      data: books,
+    };
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+const getMyLibrary = async (userId) => {
+  try {
+    const data = await Modals.UserBook.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+          status: {
+            $in: [BOOKS_READ_STATUS.READ, BOOKS_READ_STATUS.READING],
+          },
+        },
+      },
+      {
+        $sort: { updatedAt: -1 },
+      },
+
+      // 4. Join with Books
+      {
+        $lookup: {
+          from: "books",
+          localField: "book",
+          foreignField: "_id",
+          as: "bookData",
+        },
+      },
+      // 5. Convert array → object
+      {
+        $unwind: "$bookData",
+      },
+
+      // 6. Merge fields
+      {
+        $addFields: {
+          title: "$bookData.title",
+          description: "$bookData.description",
+          price: "$bookData.price",
+        },
+      },
+
+      // 7. Clean response
+      {
+        $project: {
+          bookData: 0,
+        },
+      },
+    ]);
+    console.log(data, "------========data", userId);
+
+    return {
+      message: "Library fetched successfully",
+      data,
+    };
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -206,4 +305,5 @@ export {
   deleteBook,
   getAllBooks,
   updateBookStatus,
+  getMyLibrary,
 };

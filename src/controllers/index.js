@@ -5,7 +5,8 @@ import {
   updateMyBook,
   deleteBook,
   getAllBooks,
-  updateBookStatus
+  updateBookStatus,
+  getMyLibrary,
 } from "./books.js";
 import {
   addCategory,
@@ -70,5 +71,6 @@ export {
   updateSubCategory,
   deleteSubCategory,
   getAllBooks,
-  updateBookStatus
+  updateBookStatus,
+  getMyLibrary,
 };

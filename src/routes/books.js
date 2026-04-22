@@ -41,14 +41,20 @@ const router = Router();
  *       200:
  *         description: Book added successfully
  */
-router.post("/book", authVerify, authorise("user"), Controllers.addBook);
+router.get("/books", authVerify, authorise("user"), Controllers.getAllBooks);
 router.get(
-  "/books",
+  "/my-library",
   authVerify,
   authorise("user"),
-  Controllers.getAllBooks
+  Controllers.getMyLibrary,
 );
-router.put("/update-book-status/:id", authVerify, authorise("user"), Controllers.updateBookStatus);
+router.post("/book", authVerify, authorise("user"), Controllers.addBook);
+router.put(
+  "/update-book-status/:id",
+  authVerify,
+  authorise("user"),
+  Controllers.updateBookStatus,
+);
 
 /**
  * @swagger

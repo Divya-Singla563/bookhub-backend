@@ -20,9 +20,6 @@ const addBook = async (req, res, next) => {
   }
 };
 
-
-
-
 const getMyBookById = async (req, res, next) => {
   try {
     const result = await Services.getMyBookById(req.user._id, req.params.id);
@@ -87,14 +84,17 @@ const getUserBooks = async (req, res, next) => {
 
 const updateBookStatus = async (req, res, next) => {
   try {
-    const result = await Services.updateBookStatus(req.body, req.params.id, req.user._id);
+    const result = await Services.updateBookStatus(
+      req.body,
+      req.params.id,
+      req.user._id,
+    );
 
     return res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
-
 
 const getAllBooks = async (req, res, next) => {
   try {
@@ -115,7 +115,23 @@ const getAllBooks = async (req, res, next) => {
   }
 };
 
+const getMyLibrary = async (req, res, next) => {
+  try {
+    const result = await Services.getMyLibrary(req.user._id);
 
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
-
-export { addBook, getUserBooks, getMyBookById, updateMyBook, deleteBook, getAllBooks, updateBookStatus };
+export {
+  addBook,
+  getUserBooks,
+  getMyBookById,
+  updateMyBook,
+  deleteBook,
+  getAllBooks,
+  updateBookStatus,
+  getMyLibrary,
+};
