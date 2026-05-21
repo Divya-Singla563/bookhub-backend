@@ -10,29 +10,30 @@ import routes from "./src/routes/index.js";
 import requestLogger from "./src/middlewares/request-logger.js";
 import errorHandler from "./src/middlewares/error-handler.js";
 import cookieParser from "cookie-parser";
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './swagger.js';
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-
+import decryptRequest from "./src/middlewares/decrypt.middleware.js";
+import { generateHash, verifyHash } from "./src/utils/crypto.js";
 
 const app = express();
 
 //middlewares
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(decryptRequest); // Decrypt incoming requests
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(languageMiddleware);
-app.use(helmet())
+app.use(helmet());
 // {
 //   // contentSecurityPolicy: false,
 // }
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 50,
-  message: 'Too many requests'
-})
+  message: "Too many requests",
+});
 // app.use(requestLogger); // automatic request logging
 
 //routes
@@ -56,7 +57,7 @@ app.use((error, req, res, next) => {
 });
 
 // Swagger route
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

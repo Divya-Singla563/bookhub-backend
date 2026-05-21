@@ -16,7 +16,7 @@
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.4",
     "ejs": "^5.0.1",
